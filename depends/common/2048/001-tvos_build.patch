@@ -1,0 +1,20 @@
+--- a/Makefile
++++ b/Makefile
+@@ -33,6 +33,17 @@
+ 	SHARED := -dynamiclib
+ 	DEFINES := -DIOS
+ 	CC = clang -arch armv7 -isysroot $(IOSSDK)
++# tvOS
++else ifeq ($(platform), tvos-arm64)
++   TARGET := $(TARGET_NAME)_libretro_tvos.dylib
++   fpic := -fPIC
++   SHARED := -dynamiclib
++   DEFINES := -DIOS
++   CFLAGS += -DDONT_WANT_ARM_OPTIMIZATIONS
++   CC = clang -arch arm64 -isysroot $(IOSSDK)
++ifeq ($(IOSSDK),)
++   IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
++endif
+ else ifeq ($(platform), qnx)
+ 	TARGET := $(TARGET_NAME)_libretro_qnx.so
+    fpic := -fPIC
